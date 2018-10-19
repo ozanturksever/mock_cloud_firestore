@@ -1,8 +1,8 @@
 name: mock_cloud_firestore
 description: Mock Cloud Firestore
 version: 0.0.1
-author:
-homepage:
+author: Ozan Turksever <ozan.turksever@gmail.com>
+homepage: https://github.com/ozanturksever/mock_cloud_firestore
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -10,8 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore:
-  mockito:
+  cloud_firestore: ^0.8.2+1
+  mockito: ^3.0.0
+  test: ^1.3.0
 
 dev_dependencies:
   flutter_test:
