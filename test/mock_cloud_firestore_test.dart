@@ -90,5 +90,17 @@ void main() {
     MockDocumentSnapshot docSnap = first.documents[0];
     expect(docSnap.data["id"], "1");
   });
+  test('add new document', () async{
+    MockCollectionReference col = mcf.collection("projects");
 
+    bool hasData = false;
+    col.snapshots().listen((QuerySnapshot snapshot){
+      hasData = true;
+    });
+
+    Map<String, dynamic> data = {"id":"1000", r"$": "Project"};
+    await col.add(data);
+
+    expect(hasData, true);
+  });
 }
