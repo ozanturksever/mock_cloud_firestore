@@ -92,9 +92,9 @@ void main() {
     expect(first, isNotNull);
 //    MockDocumentChange docChange = first.documentChanges[0];
 //    expect(docChange.document.data["id"], "1");
-//
-//    MockDocumentSnapshot docSnap = first.documents[0];
-//    expect(docSnap.data["id"], "1");
+
+    MockDocumentSnapshot docSnap = first.documents[0];
+    expect(docSnap.data["id"], "1");
   });
   test('add new document', () async {
     MockCollectionReference col = mcf.collection("projects");
@@ -113,15 +113,15 @@ void main() {
   test("add new document from server", () async {
     MockCollectionReference col = mcf.collection("projects");
 
-    DocumentChange change;
     col.snapshots().listen((QuerySnapshot snapshot) {
-      change = snapshot.documentChanges[0];
+      if(snapshot.documentChanges.length > 0) {
+        DocumentChange change = snapshot.documentChanges[0];
+        expect(change.type, DocumentChangeType.added);
+      }
     });
 
     Map<String, dynamic> data = {"id": "1000", r"$": "Project"};
     col.simulateAddFromServer(data);
-    await Future<Null>.delayed(Duration.zero);
-
-    expect(change.type, DocumentChangeType.added);
   });
+
 }

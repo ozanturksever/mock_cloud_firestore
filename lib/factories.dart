@@ -12,14 +12,14 @@ MockQuerySnapshot createMockQuerySnapshot(Map<String, dynamic> colData,
     docSnapList.add(ds);
   });
   added.forEach((value) {
-    MockDocumentChange dc = createDocumentChange(value, DocumentChangeType.added);
+    MockDocumentChange dc =
+        createDocumentChange(value, DocumentChangeType.added);
     docChangeList.add(dc);
   });
   when(s.documentChanges).thenAnswer((_) => docChangeList);
   when(s.documents).thenAnswer((_) => docSnapList);
   return s;
 }
-
 
 MockDocumentReference createDocumentReferance(Map<String, dynamic> value) {
   MockDocumentReference r = MockDocumentReference();
@@ -29,8 +29,8 @@ MockDocumentReference createDocumentReferance(Map<String, dynamic> value) {
   return r;
 }
 
-
-MockDocumentChange createDocumentChange(Map<String, dynamic> value, DocumentChangeType type) {
+MockDocumentChange createDocumentChange(
+    Map<String, dynamic> value, DocumentChangeType type) {
   MockDocumentChange dc = MockDocumentChange();
   MockDocumentSnapshot ds = createDocumentSnapshot(value);
   when(dc.oldIndex).thenReturn(-1);

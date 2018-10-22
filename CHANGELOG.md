@@ -1,3 +1,6 @@
+## [0.0.3]
+* chore
+
 ## [0.0.2]
 
 * implemented `add`
