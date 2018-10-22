@@ -130,4 +130,36 @@ void main() {
     col.simulateAddFromServer(data);
   });
 
+  test("update document from server", () async {
+    MockCollectionReference col = mcf.collection("projects");
+
+    col.snapshots().listen((QuerySnapshot snapshot) {
+      if(snapshot.documentChanges.length > 0) {
+        DocumentSnapshot doc = snapshot.documents[0];
+        expect(doc.data, isNotNull);
+
+        DocumentChange change = snapshot.documentChanges[0];
+        expect(change.type, DocumentChangeType.modified);
+      }
+    });
+
+    Map<String, dynamic> data = {"id": "1", "title": "modified"};
+    col.simulateModifyFromServer(data);
+  });
+
+  test("delete document from server", () async {
+    MockCollectionReference col = mcf.collection("projects");
+
+    col.snapshots().listen((QuerySnapshot snapshot) {
+      if(snapshot.documentChanges.length > 0) {
+        expect(snapshot.documents.length, 0);
+
+        DocumentChange change = snapshot.documentChanges[0];
+        expect(change.type, DocumentChangeType.removed);
+      }
+    });
+
+    col.simulateRemoveFromServer("1");
+  });
+
 }

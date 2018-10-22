@@ -17,10 +17,25 @@ class MockCollectionReference extends Mock implements CollectionReference {
   MockCollectionReference(String this.collectionName, this.colData);
 
   simulateAddFromServer(Map<String, dynamic> doc) {
-    Map<String, dynamic> newColData = colData;
+    Map<String, dynamic> newColData = Map<String, dynamic>.from(colData);
+    newColData[doc["id"]] = doc;
+    MockQuerySnapshot mqs = createMockQuerySnapshot(newColData, added: [doc]);
+    controller.add(mqs);
+  }
+
+  simulateModifyFromServer(Map<String, dynamic> doc) {
+    Map<String, dynamic> newColData = Map<String, dynamic>.from(colData);
     newColData[doc["id"]] = doc;
     MockQuerySnapshot mqs =
-        createMockQuerySnapshot(colData, added: [doc]);
+    createMockQuerySnapshot(newColData, modified: [doc]);
+    controller.add(mqs);
+  }
+
+  simulateRemoveFromServer(String id) {
+    Map<String, dynamic> newColData = Map<String, dynamic>.from(colData);
+    Map<String, dynamic> doc = newColData.remove(id);
+    MockQuerySnapshot mqs =
+    createMockQuerySnapshot(newColData, removed: [doc]);
     controller.add(mqs);
   }
 }

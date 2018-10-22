@@ -1,3 +1,8 @@
+## [0.0.4]
+
+* new `simulateModifyFromServer` to simulate modifying a document from server
+* new `simulateRemoveFromServer` to simulate removing a document from server
+
 ## [0.0.3]
 * chore
 
