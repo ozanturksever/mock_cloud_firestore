@@ -48,7 +48,9 @@ class MockCloudFirestore {
     MockQuerySnapshot mqs = createMockQuerySnapshot(colData);
 
     when(mcr.snapshots()).thenAnswer((_) {
-      mcr.controller.add(mqs);
+      Future<Null>.delayed(Duration(milliseconds: 100), () {
+        mcr.controller.add(mqs);
+      });
       return mcr.controller.stream;
     });
     return mcr;
