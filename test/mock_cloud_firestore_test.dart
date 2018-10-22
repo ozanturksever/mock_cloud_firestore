@@ -115,6 +115,12 @@ void main() {
 
     col.snapshots().listen((QuerySnapshot snapshot) {
       if(snapshot.documentChanges.length > 0) {
+        DocumentSnapshot doc = snapshot.documents[0];
+        expect(doc.data, isNotNull);
+
+        DocumentSnapshot doc1 = snapshot.documents[1];
+        expect(doc1.data, isNotNull);
+
         DocumentChange change = snapshot.documentChanges[0];
         expect(change.type, DocumentChangeType.added);
       }

@@ -10,13 +10,17 @@ class MockQuerySnapshot extends Mock implements QuerySnapshot {}
 
 class MockCollectionReference extends Mock implements CollectionReference {
   String collectionName;
+  Map<String, dynamic> colData;
   StreamController<QuerySnapshot> controller =
       StreamController<QuerySnapshot>.broadcast();
 
-  MockCollectionReference(String this.collectionName) : super();
+  MockCollectionReference(String this.collectionName, this.colData);
 
   simulateAddFromServer(Map<String, dynamic> doc) {
-    MockQuerySnapshot mqs = createMockQuerySnapshot({}, added: [doc]);
+    Map<String, dynamic> newColData = colData;
+    newColData[doc["id"]] = doc;
+    MockQuerySnapshot mqs =
+        createMockQuerySnapshot(colData, added: [doc]);
     controller.add(mqs);
   }
 }

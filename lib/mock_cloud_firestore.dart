@@ -21,9 +21,10 @@ class MockCloudFirestore {
     if (collectionReferenceCache[collectionName] != null) {
       return collectionReferenceCache[collectionName];
     }
-    MockCollectionReference mcr = MockCollectionReference(collectionName);
-    collectionReferenceCache[collectionName] = mcr;
     Map<String, dynamic> colData = sourceParsed[collectionName];
+
+    MockCollectionReference mcr = MockCollectionReference(collectionName, colData);
+    collectionReferenceCache[collectionName] = mcr;
 
     when(mcr.add(any)).thenAnswer((Invocation inv) {
       var value = inv.positionalArguments[0];
