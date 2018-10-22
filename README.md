@@ -136,7 +136,7 @@ void main() {
         ),
       ),
     );
-    await tester.pump();
+    await tester.pump(Duration.zero); // Duration.zero is required or you get a timer exception
     expect(find.text("test project 1"), findsOneWidget);
   });
 }
