@@ -46,18 +46,24 @@ void main() {
   });
 
   test('loads json', () {
-    expect(mcf.sourceParsed, isNotNull );
+    expect(mcf.sourceParsed, isNotNull);
   });
 
-  test('get collection', (){
+  test('get collection', () {
     MockCollectionReference col = mcf.collection("projects");
     expect(col, isNotNull);
   });
-  test('get not exist collection', (){
+  test('get not exist collection', () {
     MockCollectionReference col = mcf.collection("not exists");
     expect(col, isNotNull);
   });
-  test('get document from collection', () async{
+  test('get collection if cached', () {
+    MockCollectionReference col1 = mcf.collection("projects");
+    MockCollectionReference col2 = mcf.collection("projects");
+    expect(col1, col2);
+
+  });
+  test('get document from collection', () async {
     MockCollectionReference col = mcf.collection("projects");
     expect(col, isNotNull);
     MockDocumentReference doc = col.document("1");
@@ -67,7 +73,7 @@ void main() {
     expect(docSnapshot.data["title"], "test project 1");
   });
 
-  test('get not exist document from collection', () async{
+  test('get not exist document from collection', () async {
     MockCollectionReference col = mcf.collection("projects");
     expect(col, isNotNull);
     MockDocumentReference doc = col.document("not exists");
@@ -77,7 +83,7 @@ void main() {
     expect(docSnapshot.data, isNull);
   });
 
-  test('get document snaphots from collection', () async{
+  test('get document snaphots from collection', () async {
     MockCollectionReference col = mcf.collection("projects");
     expect(col, isNotNull);
     Stream<QuerySnapshot> snaphosts = col.snapshots();
@@ -90,17 +96,32 @@ void main() {
     MockDocumentSnapshot docSnap = first.documents[0];
     expect(docSnap.data["id"], "1");
   });
-  test('add new document', () async{
+  test('add new document', () async {
     MockCollectionReference col = mcf.collection("projects");
 
     bool hasData = false;
-    col.snapshots().listen((QuerySnapshot snapshot){
+    col.snapshots().listen((QuerySnapshot snapshot) {
       hasData = true;
     });
 
-    Map<String, dynamic> data = {"id":"1000", r"$": "Project"};
+    Map<String, dynamic> data = {"id": "1000", r"$": "Project"};
     await col.add(data);
 
     expect(hasData, true);
+  });
+
+  test("add new document from server", () async {
+    MockCollectionReference col = mcf.collection("projects");
+
+    DocumentChange change;
+    col.snapshots().listen((QuerySnapshot snapshot) {
+      change = snapshot.documentChanges[0];
+    });
+
+    Map<String, dynamic> data = {"id": "1000", r"$": "Project"};
+    col.simulateAddFromServer(data);
+    await Future<Null>.delayed(Duration.zero);
+
+    expect(change.type, DocumentChangeType.added);
   });
 }
