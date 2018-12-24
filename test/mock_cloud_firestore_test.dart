@@ -73,6 +73,13 @@ void main() {
     expect(docSnapshot.data["title"], "test project 1");
   });
 
+  test('getDocuments from collection', () async {
+    MockCollectionReference col = mcf.collection("projects");
+    expect(col, isNotNull);
+    MockQuerySnapshot docs = await col.getDocuments();
+    expect(docs, isNotNull);
+  });
+
   test('get not exist document from collection', () async {
     MockCollectionReference col = mcf.collection("projects");
     expect(col, isNotNull);

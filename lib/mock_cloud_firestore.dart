@@ -23,7 +23,8 @@ class MockCloudFirestore {
     }
     Map<String, dynamic> colData = sourceParsed[collectionName];
 
-    MockCollectionReference mcr = MockCollectionReference(collectionName, colData);
+    MockCollectionReference mcr =
+        MockCollectionReference(collectionName, colData);
     collectionReferenceCache[collectionName] = mcr;
 
     when(mcr.add(any)).thenAnswer((Invocation inv) {
@@ -53,6 +54,9 @@ class MockCloudFirestore {
         mcr.controller.add(mqs);
       });
       return mcr.controller.stream;
+    });
+    when(mcr.getDocuments()).thenAnswer((_) {
+      return Future<MockQuerySnapshot>.delayed(Duration.zero, () => mqs);
     });
     return mcr;
   }
