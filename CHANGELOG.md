@@ -1,3 +1,6 @@
+## [0.0.5]
+* implemented `getDocuments`
+
 ## [0.0.4]
 
 * new `simulateModifyFromServer` to simulate modifying a document from server
