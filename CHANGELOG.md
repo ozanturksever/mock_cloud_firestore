@@ -1,3 +1,6 @@
+## [0.0.7]
+* Version bump
+
 ## [0.0.6]
 * merge [update dependencies](https://github.com/ozanturksever/mock_cloud_firestore/pull/3)
 
