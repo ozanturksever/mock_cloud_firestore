@@ -44,6 +44,7 @@ class MockCloudFirestore {
     }
     colData.forEach((String key, dynamic value) {
       MockDocumentReference mdr = createDocumentReferance(value);
+      when(mdr.documentID).thenReturn(key);
       when(mcr.document(key)).thenAnswer((_) => mdr);
     });
 
