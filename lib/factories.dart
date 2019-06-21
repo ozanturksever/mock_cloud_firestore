@@ -28,8 +28,7 @@ MockQuerySnapshot createMockQuerySnapshot(Map<String, dynamic> colData,
 
 MockDocumentReference createDocumentReferance(Map<String, dynamic> value) {
   MockDocumentReference r = MockDocumentReference();
-  MockDocumentSnapshot s = MockDocumentSnapshot();
-  when(s.data).thenReturn(value);
+  MockDocumentSnapshot s = createDocumentSnapshot(value);
   when(r.get()).thenAnswer((_) => Future.value(s));
   return r;
 }
@@ -48,5 +47,6 @@ MockDocumentChange createDocumentChange(
 MockDocumentSnapshot createDocumentSnapshot(Map<String, dynamic> value) {
   MockDocumentSnapshot ds = MockDocumentSnapshot();
   when(ds.data).thenReturn(value);
+  when(ds.exists).thenReturn(value != null);
   return ds;
 }
