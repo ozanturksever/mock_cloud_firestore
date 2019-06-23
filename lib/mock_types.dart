@@ -83,7 +83,9 @@ class MockCollectionReference extends Mock implements CollectionReference {
   }
 }
 
-class MockDocumentReference extends Mock implements DocumentReference {}
+class MockDocumentReference extends Mock implements DocumentReference {
+  StreamController<DocumentSnapshot> controller =  StreamController<DocumentSnapshot>.broadcast();
+}
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
 

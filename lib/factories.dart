@@ -33,6 +33,13 @@ MockDocumentReference createDocumentReferance(Map<String, dynamic> value) {
   MockDocumentSnapshot s = MockDocumentSnapshot();
   when(s.data).thenReturn(value);
   when(r.get()).thenAnswer((_) => Future.value(s));
+  when(r.snapshots()).thenAnswer((_) {
+    Future<Null>.delayed(Duration.zero, () {
+      r.controller.add(s);
+    });
+    return r.controller.stream;
+  });
+
   return r;
 }
 
