@@ -1,3 +1,6 @@
+## [0.0.10]
+* impl `docRef.snapshots()` support
+
 ## [0.0.9]
 * add `where` support
 
