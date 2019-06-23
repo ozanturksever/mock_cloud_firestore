@@ -1,3 +1,6 @@
+## [0.0.9]
+* add `where` support
+
 ## [0.0.8]
 * merge [update dependencies](https://github.com/ozanturksever/mock_cloud_firestore/pull/6)
 

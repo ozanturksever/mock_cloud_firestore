@@ -8,40 +8,57 @@ But this requires knowledge of firebase protocol. This implementation tries to p
 ```dart
   String source = r"""
 {
-	"goals": {
-		"1": {
-			"$": "Goal",
-			"id": "1",
-			"taskId": "1",
-			"projectId": "1",
-			"profileId": "1",
-			"state": "ASSIGNED"
-		}
-	},
-	"projects": {
-		"1": {
-			"id": "1",
-			"$": "Project",
-			"title": "test title",
-			"description": "description",
-			"contributors": ["2"],
-			"creatorProfileId": "3",
-			"state": "INCOMPLETE"
-		}
-	},
-	"tasks": {
-		"1": {
-			"id": "1",
-			"$": "Task",
-			"projectId": "123",
-			"description": "test desc",
-			"closeReason": "",
-			"closeReasonDescription": "",
-			"creatorProfileId": "123",
-			"assigneeProfileId": "123",
-			"state": "INCOMPLETE"
-		}
-	}
+  "goals": {
+    "1": {
+      "$": "Goal",
+      "id": "1",
+      "taskId": "1",
+      "projectId": "1",
+      "profileId": "1",
+      "state": "ASSIGNED"
+    }
+  },
+  "projects": {
+    "1": {
+      "id": "1",
+      "$": "Project",
+      "title": "test title",
+      "description": "description",
+      "contributors": [
+        "2"
+      ],
+      "creatorProfileId": "3",
+      "state": "INCOMPLETE"
+    },
+    "__where__": {
+      "id == 1": {
+        "1": {
+          "id": "1",
+          "$": "Project",
+          "title": "test title",
+          "description": "description",
+          "contributors": [
+            "2"
+          ],
+          "creatorProfileId": "3",
+          "state": "INCOMPLETE"
+        }
+      }
+    }
+  },
+  "tasks": {
+    "1": {
+      "id": "1",
+      "$": "Task",
+      "projectId": "123",
+      "description": "test desc",
+      "closeReason": "",
+      "closeReasonDescription": "",
+      "creatorProfileId": "123",
+      "assigneeProfileId": "123",
+      "state": "INCOMPLETE"
+    }
+  }
 }
 """;
 
@@ -141,3 +158,27 @@ void main() {
   });
 }
 ```
+
+## using `where` on collection
+add expected results to collection node with `__where__` key.See example on `projects` collection.
+
+### condition format
+ `field name` `operator` `expected value` 
+
+### condition operators (in order)
+- isEqualTo: `==`
+- isLessThen: `<`
+- isLessThanOrEqualTo: `=<`
+- isGreaterThen: `>`
+- isGreaterThanOrEqualTo: `=>`
+- arrayContains: 'array-contains'
+- isNull: `null`
+
+### about condition order
+dart does't give order guarantee to named arguments, so order is hard coded with in code. See operators for the order.
+Don't expect logical conditions like `id > 1 & id < 5` this is not valid because of ordering, it must be like `id < 5 & id > 1`
+  
+### examples
+- `id == 1`
+- `id < 5 & id > 1`multiple conditions concat with ` & `, spaces are required
+- `id array-contains ["1", "2"]` value should be json encoded 
