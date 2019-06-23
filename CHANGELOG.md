@@ -1,3 +1,6 @@
+## [0.0.11]
+* chore run flutter format
+
 ## [0.0.10]
 * impl `docRef.snapshots()` support
 

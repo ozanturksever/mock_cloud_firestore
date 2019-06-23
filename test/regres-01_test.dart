@@ -18,8 +18,7 @@ class BackendApi {
     return docSnap.data;
   }
 
-  Future projects() async =>
-      collectionGet("projects").getDocuments();
+  Future projects() async => collectionGet("projects").getDocuments();
 }
 
 class FirebaseDepWidget extends StatelessWidget {
