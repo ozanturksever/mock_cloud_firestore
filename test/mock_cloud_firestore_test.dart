@@ -19,12 +19,24 @@ void main() {
   "projects": {
     "1": {
       "id": "1",
-      "title": "test project 1"
+      "title": "test project 1",
+      "tasks": {
+        "101": {
+          "id": "101",
+          "taskId": "1",
+          "projectPriority": true
+        },
+        "102": {
+          "id": "102",
+          "taskId": "2",
+          "projectPriority": false
+        }
+      }
     },
     "2": {
       "id": "2",
       "title": "test project 2"
-    }    
+    }
   },
   "tasks": {
     "1": {
@@ -88,6 +100,7 @@ void main() {
     MockDocumentSnapshot docSnapshot = await doc.get();
     expect(docSnapshot, isNotNull);
     expect(docSnapshot.data, isNull);
+    expect(docSnapshot.exists, false);
   });
 
   test('get document snaphots from collection', () async {
@@ -102,7 +115,33 @@ void main() {
 
     MockDocumentSnapshot docSnap = first.documents[0];
     expect(docSnap.data["id"], "1");
+    expect(docSnap.exists, true);
+    expect(docSnap.documentID, "1");
+    expect(docSnap.reference, isNotNull);
   });
+
+  test('get sub-collection from document', () {
+    MockCollectionReference col = mcf.collection("projects");
+    expect(col, isNotNull);
+    MockDocumentReference doc = col.document("1");
+    expect(doc, isNotNull);
+    // MockDocumentSnapshot docSnapshot = await doc.get();
+    // expect(docSnapshot, isNotNull);
+
+    CollectionReference cr = doc.collection("tasks");
+    expect(cr, isNotNull);
+    Stream<QuerySnapshot> qs = cr.snapshots();
+    expect(qs, isNotNull);
+  });
+
+  test('get document from collection', () {
+    MockCollectionReference col = mcf.collection("projects");
+    expect(col, isNotNull);
+    MockDocumentReference r = col.document("1");
+    expect(r, isNotNull);
+    expect(r.documentID, "1");
+  });
+
   test('add new document', () async {
     MockCollectionReference col = mcf.collection("projects");
 
