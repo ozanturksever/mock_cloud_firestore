@@ -17,7 +17,8 @@ class MockCloudFirestore {
     sourceParsed = json.decode(source);
   }
 
-  MockCollectionReference collection(String collectionName, {Map<String, dynamic> source}) {
+  MockCollectionReference collection(String collectionName,
+      {Map<String, dynamic> source}) {
     if (collectionReferenceCache[collectionName] != null) {
       return collectionReferenceCache[collectionName];
     }
@@ -49,11 +50,13 @@ class MockCloudFirestore {
       when(mdr.documentID).thenReturn(key);
       when(mcr.document(key)).thenAnswer((_) => mdr);
 
-      (value as Map<String, dynamic>).forEach((String k, dynamic v){
-        if (v is Map<String, dynamic>) {
+      (value as Map<String, dynamic>).forEach((String k, dynamic v) {
+        if (v is Map<String, dynamic> &&
+            v.length > 0 &&
+            v.entries.first.value is Map<String, dynamic>) {
           Map<String, dynamic> map = Map<String, dynamic>();
           map.addEntries([MapEntry<String, dynamic>(k, v)]);
-          MockCollectionReference c = collection(k,source: map);
+          MockCollectionReference c = collection(k, source: map);
           when(mdr.collection(k)).thenAnswer((_) => c);
         }
       });
