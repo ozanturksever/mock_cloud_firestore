@@ -6,15 +6,18 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mock_cloud_firestore/factories.dart';
 import 'package:mock_cloud_firestore/mock_types.dart';
-import 'package:mockito/mockito.dart';
 
 class MockCloudFirestore {
   Map<String, dynamic> sourceParsed;
+  Map<String, dynamic> whereData = {};
   Map<String, StreamController<QuerySnapshot>> snapshotStreams = {};
   Map<String, MockCollectionReference> collectionReferenceCache = {};
 
   MockCloudFirestore(String source) {
     sourceParsed = json.decode(source);
+    if (sourceParsed != null) {
+      whereData = sourceParsed["__where__"];
+    }
   }
 
   MockCollectionReference collection(String collectionName,
@@ -25,9 +28,14 @@ class MockCloudFirestore {
 
     source ??= sourceParsed;
     Map<String, dynamic> colData = source[collectionName];
+    Map<String, dynamic> whereData = {};
+    if (colData != null) {
+      whereData = colData["__where__"];
+      colData.remove("__where__");
+    }
 
     MockCollectionReference mcr =
-        MockCollectionReference(collectionName, colData);
+        createCollectionReference(collectionName, colData, whereData);
     collectionReferenceCache[collectionName] = mcr;
 
     when(mcr.add(any)).thenAnswer((Invocation inv) {

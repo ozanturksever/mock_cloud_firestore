@@ -1,3 +1,15 @@
+## [0.0.11]
+* chore run flutter format
+
+## [0.0.10]
+* impl `docRef.snapshots()` support
+
+## [0.0.9]
+* add `where` support
+
+## [0.0.8]
+* merge [update dependencies](https://github.com/ozanturksever/mock_cloud_firestore/pull/6)
+
 ## [0.0.7]
 * Version bump
 
