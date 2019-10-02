@@ -20,11 +20,14 @@ class MockCloudFirestore {
     }
   }
 
-  MockCollectionReference collection(String collectionName) {
+  MockCollectionReference collection(String collectionName,
+      {Map<String, dynamic> source}) {
     if (collectionReferenceCache[collectionName] != null) {
       return collectionReferenceCache[collectionName];
     }
-    Map<String, dynamic> colData = sourceParsed[collectionName];
+
+    source ??= sourceParsed;
+    Map<String, dynamic> colData = source[collectionName];
     Map<String, dynamic> whereData = {};
     if (colData != null) {
       whereData = colData["__where__"];
@@ -35,6 +38,49 @@ class MockCloudFirestore {
         createCollectionReference(collectionName, colData, whereData);
     collectionReferenceCache[collectionName] = mcr;
 
+    when(mcr.add(any)).thenAnswer((Invocation inv) {
+      var value = inv.positionalArguments[0];
+      MockDocumentReference mdr = createDocumentReferance(value);
+
+      MockQuerySnapshot mqs = createMockQuerySnapshot(colData, added: [value]);
+      mcr.controller.add(mqs);
+
+      return Future.value(mdr);
+    });
+
+    MockDocumentReference mdr = createDocumentReferance(null);
+    when(mcr.document(any)).thenAnswer((_) => mdr);
+    if (colData == null) {
+      return mcr;
+    }
+    colData.forEach((String key, dynamic value) {
+      MockDocumentReference mdr = createDocumentReferance(value);
+      when(mdr.documentID).thenReturn(key);
+      when(mcr.document(key)).thenAnswer((_) => mdr);
+
+      (value as Map<String, dynamic>).forEach((String k, dynamic v) {
+        if (v is Map<String, dynamic> &&
+            v.length > 0 &&
+            v.entries.first.value is Map<String, dynamic>) {
+          Map<String, dynamic> map = Map<String, dynamic>();
+          map.addEntries([MapEntry<String, dynamic>(k, v)]);
+          MockCollectionReference c = collection(k, source: map);
+          when(mdr.collection(k)).thenAnswer((_) => c);
+        }
+      });
+    });
+
+    MockQuerySnapshot mqs = createMockQuerySnapshot(colData);
+
+    when(mcr.snapshots()).thenAnswer((_) {
+      Future<Null>.delayed(Duration.zero, () {
+        mcr.controller.add(mqs);
+      });
+      return mcr.controller.stream;
+    });
+    when(mcr.getDocuments()).thenAnswer((_) {
+      return Future<MockQuerySnapshot>.delayed(Duration.zero, () => mqs);
+    });
     return mcr;
   }
 }
