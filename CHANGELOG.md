@@ -1,3 +1,10 @@
+## [0.0.13]
+* merge [update dependencies](https://github.com/ozanturksever/mock_cloud_firestore/pull/12)
+* implement removed on snapshots
+
+## [0.0.12]
+* merge [update dependencies](https://github.com/ozanturksever/mock_cloud_firestore/pull/13)
+
 ## [0.0.11]
 * chore run flutter format
 

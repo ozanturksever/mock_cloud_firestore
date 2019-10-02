@@ -186,6 +186,22 @@ void main() {
     col.simulateAddFromServer(data);
   });
 
+  test("remove document from server", () async {
+    MockCollectionReference col = mcf.collection("projects");
+
+    col.snapshots().listen((QuerySnapshot snapshot) {
+      if (snapshot.documentChanges.length > 0) {
+        DocumentSnapshot doc = snapshot.documents[0];
+        expect(doc.data, isNotNull);
+
+        DocumentChange change = snapshot.documentChanges[0];
+        expect(change.type, DocumentChangeType.removed);
+      }
+    });
+
+    col.simulateRemoveFromServer("1");
+  });
+
   test("update document from server", () async {
     MockCollectionReference col = mcf.collection("projects");
 
@@ -208,7 +224,7 @@ void main() {
 
     col.snapshots().listen((QuerySnapshot snapshot) {
       if (snapshot.documentChanges.length > 0) {
-        expect(snapshot.documents.length, 0);
+        expect(snapshot.documents.length, 1);
 
         DocumentChange change = snapshot.documentChanges[0];
         expect(change.type, DocumentChangeType.removed);

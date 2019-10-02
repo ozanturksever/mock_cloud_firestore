@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mock_cloud_firestore/factories.dart';
 import 'package:mock_cloud_firestore/mock_types.dart';
+import 'package:mockito/mockito.dart';
 
 class MockCloudFirestore {
   Map<String, dynamic> sourceParsed;

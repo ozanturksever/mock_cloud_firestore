@@ -23,7 +23,12 @@ MockQuerySnapshot createMockQuerySnapshot(Map<String, dynamic> colData,
   });
   modified.forEach((value) {
     MockDocumentChange dc =
-        createDocumentChange(value, DocumentChangeType.modified);
+    createDocumentChange(value, DocumentChangeType.modified);
+    docChangeList.add(dc);
+  });
+  removed.forEach((value) {
+    MockDocumentChange dc =
+    createDocumentChange(value, DocumentChangeType.removed);
     docChangeList.add(dc);
   });
   when(s.documentChanges).thenAnswer((_) => docChangeList);
