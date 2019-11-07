@@ -11,6 +11,7 @@ void main() {
   });
 
   test('get document from collection', () async {
+    print("aloooo");
     MockCollectionReference col = mcf.collection("projects");
     expect(col, isNotNull);
     MockDocumentReference doc = col.document("1");

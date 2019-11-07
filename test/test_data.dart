@@ -49,3 +49,45 @@ String source = r"""
 String getTestData() {
   return source;
 }
+
+String getTestRecursiveWhere() {
+  return """
+  {
+    "users": {
+      "1": {
+        "id": "1",
+        "name": "Vinicius",
+        "type": "2"
+      },
+      "2": {
+        "id": "2",
+        "name": "Vinicius",
+        "type": "1"
+      },
+      "__where__": {
+        "name == Vinicius": {
+          "1": {
+            "id": "1",
+            "name": "Vinicius",
+            "type": "2"
+          },
+          "2": {
+            "id": "2",
+            "name": "Vinicius",
+            "type": "1"
+          },
+          "__where__": {
+            "type == 2": {
+              "1": {
+                "id": "1",
+                "name": "Vinicius",
+                "type": "2"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  """;
+}
