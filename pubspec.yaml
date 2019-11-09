@@ -1,6 +1,6 @@
 name: mock_cloud_firestore
 description: Easier way to mock cloud_firestore, without using `Firestore.channel.setMockMethodCallHandler`
-version: 0.0.13
+version: 0.0.14
 author: Ozan Turksever <ozan.turksever@gmail.com>
 homepage: https://github.com/ozanturksever/mock_cloud_firestore
 

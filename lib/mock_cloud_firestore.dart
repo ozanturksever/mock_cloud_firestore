@@ -8,7 +8,7 @@ import 'package:mock_cloud_firestore/factories.dart';
 import 'package:mock_cloud_firestore/mock_types.dart';
 import 'package:mockito/mockito.dart';
 
-class MockCloudFirestore {
+class MockCloudFirestore extends Mock {
   Map<String, dynamic> sourceParsed;
   Map<String, dynamic> whereData = {};
   Map<String, StreamController<QuerySnapshot>> snapshotStreams = {};
