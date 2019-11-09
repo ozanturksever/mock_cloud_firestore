@@ -76,8 +76,14 @@ class MockCollectionReference extends Mock implements CollectionReference {
     String path = conditions.join(" & ");
     data = whereData[path];
     if (data != null) {
+      var newWhereData = data["__where__"];
+      if(newWhereData != null)
+        data.remove("__where__");
+      else
+        newWhereData = this.whereData;
+
       return createCollectionReference(
-          this.collectionName, data, this.whereData);
+          this.collectionName, data, newWhereData);
     }
     return null;
   }
