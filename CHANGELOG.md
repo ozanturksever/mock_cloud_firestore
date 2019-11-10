@@ -1,3 +1,6 @@
+## [0.0.15]
+* fix: Query.where override
+
 ## [0.0.14]
 * merge [nested '__where__' feature](https://github.com/ozanturksever/mock_cloud_firestore/pull/14)
 
