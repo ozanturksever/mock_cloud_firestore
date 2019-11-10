@@ -41,7 +41,7 @@ class MockCollectionReference extends Mock implements CollectionReference {
   }
 
   Query where(
-    String field, {
+    dynamic field, {
     dynamic isEqualTo,
     dynamic isLessThan,
     dynamic isLessThanOrEqualTo,
