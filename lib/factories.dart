@@ -71,8 +71,20 @@ _createNestedDocumentReferance(Map<String, dynamic> map) {
         _createNestedDocumentReferance(obj);
       }
       String refName = referenceKey.substring(7);
-      MockDocumentReference documentReference = createDocumentReferance(obj);
-      mapList[refName] = documentReference;
+      if(obj is List) {
+        List<MockDocumentReference> listDocumentReference = [];
+        for(dynamic d in obj) {
+          if(d is Map<String, dynamic>) {
+            _createNestedDocumentReferance(d);
+          }
+          MockDocumentReference documentReference = createDocumentReferance(d);
+          listDocumentReference.add(documentReference);
+        }
+        mapList[refName] = listDocumentReference;
+      } else {
+        MockDocumentReference documentReference = createDocumentReferance(obj);
+        mapList[refName] = documentReference;
+      }      
     }
     map.removeWhere((String key, dynamic value) => key.startsWith("__ref__"));
     map.addAll(mapList);
