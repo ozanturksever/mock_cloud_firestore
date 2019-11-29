@@ -107,3 +107,21 @@ String getTestDocumentReference() => """
       }
   }
   """;
+String getTestDocumentReferenceNested() => """
+  {
+      "users": {
+        "1": {
+          "id": "1",
+          "name": "Vinicius",
+          "type": "2",
+          "__ref__login": {
+            "username": "v1pi",
+            "password": "123",
+            "__ref__address": {
+              "address1": "Av unknown"
+            }
+          }
+        }
+      }
+  }
+  """;

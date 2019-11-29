@@ -61,21 +61,28 @@ MockDocumentChange createDocumentChange(
   return dc;
 }
 
+_createNestedDocumentReferance(Map<String, dynamic> map) {
+  var references = map.keys.where((String val) => val.startsWith("__ref__"));
+  if(references.isNotEmpty) {
+    Map<String, dynamic> mapList = Map();
+    for(String referenceKey in references) {
+      dynamic obj = map[referenceKey];
+      if(obj is Map<String, dynamic>) {
+        _createNestedDocumentReferance(obj);
+      }
+      String refName = referenceKey.substring(7);
+      MockDocumentReference documentReference = createDocumentReferance(obj);
+      mapList[refName] = documentReference;
+    }
+    map.removeWhere((String key, dynamic value) => key.startsWith("__ref__"));
+    map.addAll(mapList);
+  }
+}
+
 MockDocumentSnapshot createDocumentSnapshot(MockDocumentReference r, Map<String, dynamic> value) {
   MockDocumentSnapshot ds = MockDocumentSnapshot();
   if(value != null) {
-    var references = value.keys.where((String val) => val.startsWith("__ref__"));
-    if(references.isNotEmpty) {
-      Map<String, dynamic> mapList = Map();
-      for(String referenceKey in references) {
-        dynamic obj = value[referenceKey];
-        String refName = referenceKey.substring(7);
-        MockDocumentReference documentReference = createDocumentReferance(obj);
-        mapList[refName] = documentReference;
-      }
-      value.removeWhere((String key, dynamic value) => key.startsWith("__ref__"));
-      value.addAll(mapList);
-    }
+    _createNestedDocumentReferance(value);
   }
   if (value != null && value.containsKey("id"))
     when(ds.documentID).thenReturn(value["id"]);
