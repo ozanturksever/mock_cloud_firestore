@@ -91,3 +91,64 @@ String getTestRecursiveWhere() {
   }
   """;
 }
+
+String getTestDocumentReference() => """
+  {
+      "users": {
+        "1": {
+          "id": "1",
+          "name": "Vinicius",
+          "type": "2",
+          "__ref__login": {
+            "username": "v1pi",
+            "password": "123"
+          }
+        }
+      }
+  }
+  """;
+String getTestDocumentReferenceNested() => """
+  {
+      "users": {
+        "1": {
+          "id": "1",
+          "name": "Vinicius",
+          "type": "2",
+          "__ref__login": {
+            "username": "v1pi",
+            "password": "123",
+            "__ref__address": {
+              "address1": "Av unknown"
+            }
+          }
+        }
+      }
+  }
+  """;
+
+String getTestDocumentReferenceArray() => """
+  {
+      "users": {
+        "1": {
+          "id": "1",
+          "name": "Vinicius",
+          "type": "2",
+          "__ref__login": {
+            "username": "v1pi",
+            "password": "123",
+            "__ref__telephones": [
+              {
+                "telephone": "+554269897854"
+              },
+              {
+                "telephone": "+554269897855"
+              },
+              {
+                "telephone": "+554269897836"
+              }
+            ]
+          }
+        }
+      }
+  }
+  """;
