@@ -48,6 +48,8 @@ class MockCollectionReference extends Mock implements CollectionReference {
     dynamic isGreaterThan,
     dynamic isGreaterThanOrEqualTo,
     dynamic arrayContains,
+    dynamic arrayContainsAny,
+    dynamic whereIn,
     bool isNull,
   }) {
     Map<String, dynamic> data;
@@ -77,13 +79,12 @@ class MockCollectionReference extends Mock implements CollectionReference {
     data = whereData[path];
     if (data != null) {
       var newWhereData = data["__where__"];
-      if(newWhereData != null)
+      if (newWhereData != null)
         data.remove("__where__");
       else
         newWhereData = this.whereData;
 
-      return createCollectionReference(
-          this.collectionName, data, newWhereData);
+      return createCollectionReference(this.collectionName, data, newWhereData);
     }
     return null;
   }

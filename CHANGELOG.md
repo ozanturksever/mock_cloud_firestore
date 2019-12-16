@@ -1,3 +1,6 @@
+## [0.0.17]
+* fix: Query.where override
+
 ## [0.0.16]
 * merge [__ref__ feature](https://github.com/ozanturksever/mock_cloud_firestore/pull/16)
 
