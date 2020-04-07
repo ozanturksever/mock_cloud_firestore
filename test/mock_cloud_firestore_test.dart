@@ -132,6 +132,33 @@ void main() {
     expect(docSnap.reference, isNotNull);
   });
 
+  test('get document snaphot without id from collection', () async {
+    source = '''
+      {
+        "projects": {
+          "docID": {
+            "id": "projectID",
+            "title": "test project 1",
+            "due": "${Timestamp.now()}"
+          }
+        }
+      }
+    ''';
+    mcf = MockCloudFirestore(source);
+    MockCollectionReference col = mcf.collection("projects");
+    expect(col, isNotNull);
+    Stream<QuerySnapshot> snapshots = col.snapshots();
+    expect(snapshots, isNotNull);
+    QuerySnapshot first = await snapshots.first;
+    expect(first, isNotNull);
+//    MockDocumentChange docChange = first.documentChanges[0];
+//    expect(docChange.document.data["id"], "1");
+
+    MockDocumentSnapshot docSnap = first.documents[0];
+    expect(docSnap.data["id"], "projectID");
+    expect(docSnap.documentID, "docID");
+  });
+
   test('get document snaphots with stringified timestamp', () async {
     source = '''
       {
