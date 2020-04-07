@@ -133,13 +133,15 @@ void main() {
     expect(docSnap.reference, isNotNull);
   });
 
-  test('get document snaphots with stingified timestamp', () async {
+  test('get document snaphots with stringified timestamp', () async {
     source = '''
-      "projects": {
-        "1": {
-          "id": "1",
-          "title": "test project 1",
-          "due": "${Timestamp.now().toString()}"
+      {
+        "projects": {
+          "1": {
+            "id": "1",
+            "title": "test project 1",
+            "due": "${Timestamp.now().toString()}"
+          }
         }
       }
     ''';
