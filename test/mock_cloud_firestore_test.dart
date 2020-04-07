@@ -24,12 +24,14 @@ void main() {
         "101": {
           "id": "101",
           "taskId": "1",
-          "projectPriority": true
+          "projectPriority": true,
+          "due": "${Timestamp.now().toString()}"
         },
         "102": {
           "id": "102",
           "taskId": "2",
-          "projectPriority": false
+          "projectPriority": false,
+          "due": "${Timestamp.now().toString()}"
         }
       }
     },
@@ -125,6 +127,7 @@ void main() {
 
     MockDocumentSnapshot docSnap = first.documents[0];
     expect(docSnap.data["id"], "1");
+    expect(docSnap.data["due"] is Timestamp, true);
     expect(docSnap.exists, true);
     expect(docSnap.documentID, "1");
     expect(docSnap.reference, isNotNull);
