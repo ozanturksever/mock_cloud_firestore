@@ -8,6 +8,17 @@ import 'package:mock_cloud_firestore/factories.dart';
 import 'package:mock_cloud_firestore/mock_types.dart';
 import 'package:mockito/mockito.dart';
 
+dynamic _reviveTimestamp(key, value) {
+  if (value is Map && value.containsKey('_seconds') && value.containsKey('_nanoseconds')) {
+    try {
+      return Timestamp(value['_seconds'], value['_nanoseconds']);
+    } catch (e) {
+      return value;
+    }
+  }
+  return value;
+}
+
 class MockCloudFirestore extends Mock {
   Map<String, dynamic> sourceParsed;
   Map<String, dynamic> whereData = {};
@@ -15,7 +26,7 @@ class MockCloudFirestore extends Mock {
   Map<String, MockCollectionReference> collectionReferenceCache = {};
 
   MockCloudFirestore(String source) {
-    sourceParsed = json.decode(source);
+    sourceParsed = json.decode(source, reviver: _reviveTimestamp); 
     if (sourceParsed != null) {
       whereData = sourceParsed["__where__"];
     }

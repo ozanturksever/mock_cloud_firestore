@@ -20,18 +20,17 @@ void main() {
     "1": {
       "id": "1",
       "title": "test project 1",
+      "due": "${Timestamp.now().toString()}"
       "tasks": {
         "101": {
           "id": "101",
           "taskId": "1",
-          "projectPriority": true,
-          "due": "${Timestamp.now().toString()}"
+          "projectPriority": true
         },
         "102": {
           "id": "102",
           "taskId": "2",
-          "projectPriority": false,
-          "due": "${Timestamp.now().toString()}"
+          "projectPriority": false
         }
       }
     },
