@@ -96,8 +96,7 @@ MockDocumentSnapshot createDocumentSnapshot(MockDocumentReference r, Map<String,
   if(value != null) {
     _createNestedDocumentReferance(value);
   }
-  if (value != null && value.containsKey("id"))
-    when(ds.documentID).thenReturn(value["id"]);
+  when(ds.documentID).thenReturn(r?.documentID);
   when(ds.reference).thenReturn(r);
   when(ds.data).thenReturn(value);
   when(ds.exists).thenReturn(value != null);
