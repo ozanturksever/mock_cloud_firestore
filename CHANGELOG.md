@@ -1,3 +1,9 @@
+## [0.0.19]
+* fix document id referencing
+
+## [0.0.18]
+* add: support for Timestamp encoding
+
 ## [0.0.17]
 * fix: Query.where override
 
