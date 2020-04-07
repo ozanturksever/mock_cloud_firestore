@@ -132,7 +132,7 @@ void main() {
     expect(docSnap.reference, isNotNull);
   });
 
-  test('get document snaphot without id from collection', () async {
+  test('distinguish document id from "id" field', () async {
     source = '''
       {
         "projects": {
