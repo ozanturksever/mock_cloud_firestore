@@ -16,6 +16,18 @@ dynamic _reviveTimestamp(key, value) {
       return value;
     }
   }
+  final timestampExp = RegExp(r'^Timestamp\(seconds=\d+, nanoseconds=\d+\)$');
+  if (value is String && timestampExp.hasMatch(value)) {
+    try {
+      final secondsExp = RegExp(r'(?:\(seconds=)(\d+)(?:,)');
+      final nanosecondsExp = RegExp(r'(?:nanoseconds=)(\d+)(?:\))');
+      final seconds = int.tryParse(secondsExp.firstMatch(value).group(1));
+      final nanoseconds = int.tryParse(nanosecondsExp.firstMatch(value).group(1));
+      return Timestamp(seconds, nanoseconds);
+    } catch (e) {
+      return value;
+    }
+  }
   return value;
 }
 
