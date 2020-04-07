@@ -22,7 +22,6 @@ void main() {
     "1": {
       "id": "1",
       "title": "test project 1",
-      "due": "${Timestamp.now().toString()}",
       "tasks": {
         "101": {
           "id": "101",
@@ -140,7 +139,7 @@ void main() {
           "1": {
             "id": "1",
             "title": "test project 1",
-            "due": "${Timestamp.now().toString()}"
+            "due": "${Timestamp.now()}"
           }
         }
       }
@@ -162,7 +161,7 @@ void main() {
         "1": {
           "id": "1",
           "title": "test project 1",
-          "due": Timestamp.now()
+          "due": Timestamp.now().toString()
         }
       }
     });
