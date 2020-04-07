@@ -151,9 +151,6 @@ void main() {
     expect(snapshots, isNotNull);
     QuerySnapshot first = await snapshots.first;
     expect(first, isNotNull);
-//    MockDocumentChange docChange = first.documentChanges[0];
-//    expect(docChange.document.data["id"], "1");
-
     MockDocumentSnapshot docSnap = first.documents[0];
     expect(docSnap.data["id"], "projectID");
     expect(docSnap.documentID, "docID");
