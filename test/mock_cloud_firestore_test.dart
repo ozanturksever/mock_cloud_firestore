@@ -91,8 +91,10 @@ void main() {
     MockCollectionReference col = mcf.collection("projects");
     expect(col, isNotNull);
     MockDocumentReference doc = col.document("1");
+    expect(doc.documentID, "1");
     expect(doc, isNotNull);
     MockDocumentSnapshot docSnapshot = await doc.get();
+    expect(docSnapshot.documentID, "1");
     expect(docSnapshot.data["id"], "1");
     expect(docSnapshot.data["title"], "test project 1");
   });
