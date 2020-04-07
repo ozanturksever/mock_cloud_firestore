@@ -20,7 +20,7 @@ void main() {
     "1": {
       "id": "1",
       "title": "test project 1",
-      "due": "${Timestamp.now().toString()}"
+      "due": "${Timestamp.now().toString()}",
       "tasks": {
         "101": {
           "id": "101",
