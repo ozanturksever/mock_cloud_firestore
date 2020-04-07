@@ -5,7 +5,7 @@ author: Ozan Turksever <ozan.turksever@gmail.com>
 homepage: https://github.com/ozanturksever/mock_cloud_firestore
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
