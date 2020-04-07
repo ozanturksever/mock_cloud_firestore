@@ -39,6 +39,7 @@ MockQuerySnapshot createMockQuerySnapshot(Map<String, dynamic> colData,
 MockDocumentReference createDocumentReferance(Map<String, dynamic> value) {
   MockDocumentReference r = MockDocumentReference();
   MockDocumentSnapshot s = createDocumentSnapshot(r, value);
+  when(s.documentID).thenReturn(r?.documentID);
   when(r.get()).thenAnswer((_) => Future.value(s));
   when(r.snapshots()).thenAnswer((_) {
     Future<Null>.delayed(Duration.zero, () {
@@ -126,6 +127,7 @@ MockCollectionReference createCollectionReference(String collectionName,
   colData.forEach((String key, dynamic value) {
     MockDocumentReference mdr = createDocumentReferance(value);
     when(mcr.document(key)).thenAnswer((_) => mdr);
+    when(mdr.documentID).thenReturn(key);
   });
 
   MockQuerySnapshot mqs = createMockQuerySnapshot(colData);

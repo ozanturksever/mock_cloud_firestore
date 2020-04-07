@@ -72,8 +72,11 @@ class MockCloudFirestore extends Mock {
       return Future.value(mdr);
     });
 
-    MockDocumentReference mdr = createDocumentReferance(null);
-    when(mcr.document(any)).thenAnswer((_) => mdr);
+    when(mcr.document(any)).thenAnswer((invocation) {
+      MockDocumentReference mdr = createDocumentReferance(null);
+      when(mdr.documentID).thenReturn(invocation.positionalArguments[0]);
+      return mdr;
+    });
     if (colData == null) {
       return mcr;
     }
