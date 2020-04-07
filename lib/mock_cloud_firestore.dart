@@ -64,7 +64,7 @@ class MockCloudFirestore extends Mock {
 
     when(mcr.add(any)).thenAnswer((Invocation inv) {
       var value = inv.positionalArguments[0];
-      MockDocumentReference mdr = createDocumentReferance(value);
+      MockDocumentReference mdr = createDocumentReferance(null, value);
 
       MockQuerySnapshot mqs = createMockQuerySnapshot(colData, added: [value]);
       mcr.controller.add(mqs);
@@ -73,15 +73,15 @@ class MockCloudFirestore extends Mock {
     });
 
     when(mcr.document(any)).thenAnswer((invocation) {
-      MockDocumentReference mdr = createDocumentReferance(null);
-      when(mdr.documentID).thenReturn(invocation.positionalArguments[0]);
+      String documentID = invocation.positionalArguments[0];
+      MockDocumentReference mdr = createDocumentReferance(documentID, null);
       return mdr;
     });
     if (colData == null) {
       return mcr;
     }
     colData.forEach((String key, dynamic value) {
-      MockDocumentReference mdr = createDocumentReferance(value);
+      MockDocumentReference mdr = createDocumentReferance(key, value);
       when(mdr.documentID).thenReturn(key);
       when(mcr.document(key)).thenAnswer((_) => mdr);
 
