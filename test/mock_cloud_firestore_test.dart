@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mock_cloud_firestore/mock_cloud_firestore.dart';
 import 'package:mock_cloud_firestore/mock_types.dart';
@@ -126,10 +128,51 @@ void main() {
 
     MockDocumentSnapshot docSnap = first.documents[0];
     expect(docSnap.data["id"], "1");
-    expect(docSnap.data["due"] is Timestamp, true);
     expect(docSnap.exists, true);
     expect(docSnap.documentID, "1");
     expect(docSnap.reference, isNotNull);
+  });
+
+  test('get document snaphots with stingified timestamp', () async {
+    source = '''
+      "projects": {
+        "1": {
+          "id": "1",
+          "title": "test project 1",
+          "due": "${Timestamp.now().toString()}"
+        }
+      }
+    ''';
+    mcf = MockCloudFirestore(source);
+    MockCollectionReference col = mcf.collection("projects");
+    expect(col, isNotNull);
+    Stream<QuerySnapshot> snapshots = col.snapshots();
+    expect(snapshots, isNotNull);
+    QuerySnapshot first = await snapshots.first;
+    expect(first, isNotNull);
+    MockDocumentSnapshot docSnap = first.documents[0];
+    expect(docSnap.data["due"] is Timestamp, true);
+  });
+
+  test('get document snaphots with encoded timestamp', () async {
+    source = json.encode({
+      "projects": {
+        "1": {
+          "id": "1",
+          "title": "test project 1",
+          "due": Timestamp.now()
+        }
+      }
+    });
+    mcf = MockCloudFirestore(source);
+    MockCollectionReference col = mcf.collection("projects");
+    expect(col, isNotNull);
+    Stream<QuerySnapshot> snapshots = col.snapshots();
+    expect(snapshots, isNotNull);
+    QuerySnapshot first = await snapshots.first;
+    expect(first, isNotNull);
+    MockDocumentSnapshot docSnap = first.documents[0];
+    expect(docSnap.data["due"] is Timestamp, true);
   });
 
   test('get sub-collection from document', () {
