@@ -1,20 +1,20 @@
 name: mock_cloud_firestore
 description: Easier way to mock cloud_firestore, without using `Firestore.channel.setMockMethodCallHandler`
-version: 0.0.17
+version: 0.0.18
 author: Ozan Turksever <ozan.turksever@gmail.com>
 homepage: https://github.com/ozanturksever/mock_cloud_firestore
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.12.5+2
-  mockito: ^4.0.0
-  test: ^1.5.3
+  cloud_firestore: ^0.13.4+2
+  mockito: ^4.1.1
 
 dev_dependencies:
+  test: any
   flutter_test:
     sdk: flutter
 
@@ -23,7 +23,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # To add assets to your package, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
@@ -34,7 +33,6 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
