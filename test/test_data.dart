@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 String source = r"""
 {
 	"goals": {
@@ -152,3 +156,13 @@ String getTestDocumentReferenceArray() => """
       }
   }
   """;
+
+String getTestTimestamp() => jsonEncode({
+  "posts": {
+    "1": {
+      "id": "1",
+      "post": "Vinicius",
+      "timestamp": Timestamp.now().toString(),
+      }
+    }
+  });
