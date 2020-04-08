@@ -8,6 +8,29 @@ import 'package:mock_cloud_firestore/factories.dart';
 import 'package:mock_cloud_firestore/mock_types.dart';
 import 'package:mockito/mockito.dart';
 
+dynamic _reviveTimestamp(key, value) {
+  if (value is Map && value.containsKey('_seconds') && value.containsKey('_nanoseconds')) {
+    try {
+      return Timestamp(value['_seconds'], value['_nanoseconds']);
+    } catch (e) {
+      return value;
+    }
+  }
+  final timestampExp = RegExp(r'^Timestamp\(seconds=\d+, nanoseconds=\d+\)$');
+  if (value is String && timestampExp.hasMatch(value)) {
+    try {
+      final secondsExp = RegExp(r'(?:\(seconds=)(\d+)(?:,)');
+      final nanosecondsExp = RegExp(r'(?:nanoseconds=)(\d+)(?:\))');
+      final seconds = int.tryParse(secondsExp.firstMatch(value).group(1));
+      final nanoseconds = int.tryParse(nanosecondsExp.firstMatch(value).group(1));
+      return Timestamp(seconds, nanoseconds);
+    } catch (e) {
+      return value;
+    }
+  }
+  return value;
+}
+
 class MockCloudFirestore extends Mock {
   Map<String, dynamic> sourceParsed;
   Map<String, dynamic> whereData = {};
@@ -15,7 +38,7 @@ class MockCloudFirestore extends Mock {
   Map<String, MockCollectionReference> collectionReferenceCache = {};
 
   MockCloudFirestore(String source) {
-    sourceParsed = json.decode(source);
+    sourceParsed = json.decode(source, reviver: _reviveTimestamp); 
     if (sourceParsed != null) {
       whereData = sourceParsed["__where__"];
     }
@@ -41,7 +64,7 @@ class MockCloudFirestore extends Mock {
 
     when(mcr.add(any)).thenAnswer((Invocation inv) {
       var value = inv.positionalArguments[0];
-      MockDocumentReference mdr = createDocumentReferance(value);
+      MockDocumentReference mdr = createDocumentReferance(null, value);
 
       MockQuerySnapshot mqs = createMockQuerySnapshot(colData, added: [value]);
       mcr.controller.add(mqs);
@@ -49,13 +72,16 @@ class MockCloudFirestore extends Mock {
       return Future.value(mdr);
     });
 
-    MockDocumentReference mdr = createDocumentReferance(null);
-    when(mcr.document(any)).thenAnswer((_) => mdr);
+    when(mcr.document(any)).thenAnswer((invocation) {
+      String documentID = invocation.positionalArguments[0];
+      MockDocumentReference mdr = createDocumentReferance(documentID, null);
+      return mdr;
+    });
     if (colData == null) {
       return mcr;
     }
     colData.forEach((String key, dynamic value) {
-      MockDocumentReference mdr = createDocumentReferance(value);
+      MockDocumentReference mdr = createDocumentReferance(key, value);
       when(mdr.documentID).thenReturn(key);
       when(mcr.document(key)).thenAnswer((_) => mdr);
 

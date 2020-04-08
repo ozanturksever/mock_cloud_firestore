@@ -36,9 +36,11 @@ MockQuerySnapshot createMockQuerySnapshot(Map<String, dynamic> colData,
   return s;
 }
 
-MockDocumentReference createDocumentReferance(Map<String, dynamic> value) {
+MockDocumentReference createDocumentReferance(String documentID, Map<String, dynamic> value) {
   MockDocumentReference r = MockDocumentReference();
+  when(r.documentID).thenReturn(documentID);
   MockDocumentSnapshot s = createDocumentSnapshot(r, value);
+  when(s.documentID).thenReturn(r?.documentID);
   when(r.get()).thenAnswer((_) => Future.value(s));
   when(r.snapshots()).thenAnswer((_) {
     Future<Null>.delayed(Duration.zero, () {
@@ -77,12 +79,12 @@ _createNestedDocumentReferance(Map<String, dynamic> map) {
           if(d is Map<String, dynamic>) {
             _createNestedDocumentReferance(d);
           }
-          MockDocumentReference documentReference = createDocumentReferance(d);
+          MockDocumentReference documentReference = createDocumentReferance(referenceKey, d);
           listDocumentReference.add(documentReference);
         }
         mapList[refName] = listDocumentReference;
       } else {
-        MockDocumentReference documentReference = createDocumentReferance(obj);
+        MockDocumentReference documentReference = createDocumentReferance(referenceKey, obj);
         mapList[refName] = documentReference;
       }      
     }
@@ -96,8 +98,7 @@ MockDocumentSnapshot createDocumentSnapshot(MockDocumentReference r, Map<String,
   if(value != null) {
     _createNestedDocumentReferance(value);
   }
-  if (value != null && value.containsKey("id"))
-    when(ds.documentID).thenReturn(value["id"]);
+  when(ds.documentID).thenReturn(r?.documentID);
   when(ds.reference).thenReturn(r);
   when(ds.data).thenReturn(value);
   when(ds.exists).thenReturn(value != null);
@@ -111,7 +112,7 @@ MockCollectionReference createCollectionReference(String collectionName,
 
   when(mcr.add(any)).thenAnswer((Invocation inv) {
     var value = inv.positionalArguments[0];
-    MockDocumentReference mdr = createDocumentReferance(value);
+    MockDocumentReference mdr = createDocumentReferance(null, value);
 
     MockQuerySnapshot mqs = createMockQuerySnapshot(colData, added: [value]);
     mcr.controller.add(mqs);
@@ -119,13 +120,16 @@ MockCollectionReference createCollectionReference(String collectionName,
     return Future.value(mdr);
   });
 
-  MockDocumentReference mdr = createDocumentReferance(null);
-  when(mcr.document(any)).thenAnswer((_) => mdr);
+  when(mcr.document(any)).thenAnswer((invocation) {
+    String documentID = invocation.positionalArguments[0];
+    MockDocumentReference mdr = createDocumentReferance(documentID, null);
+    return mdr;
+  });
   if (colData == null) {
     return mcr;
   }
   colData.forEach((String key, dynamic value) {
-    MockDocumentReference mdr = createDocumentReferance(value);
+    MockDocumentReference mdr = createDocumentReferance(key, value);
     when(mcr.document(key)).thenAnswer((_) => mdr);
   });
 
