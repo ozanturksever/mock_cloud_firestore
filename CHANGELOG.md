@@ -1,5 +1,8 @@
+## [0.0.20]
+* merge [Decode timestamps](https://github.com/ozanturksever/mock_cloud_firestore/pull/18)
+
 ## [0.0.19]
-* fix document id referencing
+* fix: document id referencing
 
 ## [0.0.18]
 * add: support for Timestamp encoding
